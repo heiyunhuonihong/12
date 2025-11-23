@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>怀庄盛世酒展示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wine: {
+                            light: '#9c27b0',
+                            DEFAULT: '#7b1fa2',
+                            dark: '#4a148c'
+                        },
+                        gold: {
+                            light: '#fff3e0',
+                            DEFAULT: '#ffb74d',
+                            dark: '#f57c00'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif']
+                    },
+                }
+            }
+        </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .wine-card-hover {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .wine-card-hover:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.8s ease-in-out;
+            }
+            @keyframes fadeIn {
+                0% { opacity: 0; transform: translateY(20px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+            .cart-item-enter {
+                animation: cartItemEnter 0.3s ease forwards;
+            }
+            @keyframes cartItemEnter {
+                0% { opacity: 0; transform: translateX(20px); }
+                100% { opacity: 1; transform: translateX(0); }
+            }
+        }
+    </style>
+    
+    <!-- 导入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <!-- 导航栏 -->
+    <header class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <nav class="bg-white/90 backdrop-blur-sm shadow-sm py-4 px-6 md:px-10">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="#" class="flex items-center space-x-2">
+                    <i class="fa fa-glass text-wine text-2xl"></i>
+                    <span class="font-serif font-bold text-xl md:text-2xl text-wine-dark">怀庄盛世</span>
+                </a>
+                
+                <!-- 桌面端菜单 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="font-medium hover:text-wine transition-colors">首页</a>
+                    <a href="#wines" class="font-medium hover:text-wine transition-colors">酒品系列</a>
+                    <a href="#about" class="font-medium hover:text-wine transition-colors">关于我们</a>
+                    <a href="#contact" class="font-medium hover:text-wine transition-colors">联系我们</a>
+                    <a href="#cart" id="cart-link" class="relative">
+                        <i class="fa fa-shopping-cart text-xl hover:text-wine transition-colors"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-wine text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden text-gray-700 focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- 移动端菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute top-full left-0 w-full">
+                <div class="container mx-auto py-4 px-6 flex flex-col space-y-4">
+                    <a href="#home" class="font-medium py-2 hover:text-wine transition-colors">首页</a>
+                    <a href="#wines" class="font-medium py-2 hover:text-wine transition-colors">酒品系列</a>
+                    <a href="#about" class="font-medium py-2 hover:text-wine transition-colors">关于我们</a>
+                    <a href="#contact" class="font-medium py-2 hover:text-wine transition-colors">联系我们</a>
+                    <a href="#cart" id="mobile-cart-link" class="flex items-center space-x-2 py-2">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>购物车 (<span id="mobile-cart-count">0</span>)</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://picsum.photos/id/42/1920/1080" alt="怀庄盛世酒背景" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 md:px-10 relative z-10 text-center">
+            <h1 class="font-serif font-bold text-[clamp(2.5rem,6vw,4.5rem)] text-white mb-6 leading-tight text-shadow animate-fade-in">
+                怀庄盛世<span class="text-gold">酱香佳酿</span>
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 max-w-2xl mx-auto animate-fade-in" style="animation-delay: 0.2s">
+                传承茅台镇千年酿造工艺，每一瓶都是匠心与品质的结晶
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style="animation-delay: 0.4s">
+                <a href="#wines" class="btn bg-wine hover:bg-wine-dark text-white font-medium py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg">
+                    浏览酒品
+                </a>
+                <a href="#about" class="btn bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-medium py-3 px-8 rounded-full transition-all border border-white/40">
+                    了解工艺
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+            <a href="#wines" class="text-white/80 hover:text-white">
+                <i class="fa fa-angle-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 酒品展示区 -->
+    <section id="wines" class="py-20 bg-white">
+        <div class="container mx-auto px-6 md:px-10">
+            <div class="text-center mb-16">
+                <h2 class="font-serif font-bold text-[clamp(1.75rem,3vw,2.5rem)] text-gray-900 mb-4">
+                    怀庄盛世<span class="text-wine">系列酒品</span>
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    茅台镇核心产区酿造，53%vol酱香型白酒，每一款都独具风味
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 第一款酒（深蓝色款） -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md wine-card-hover group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIyRpIqFw5O1FNioUj-wRpyyc_LT26AACzjAAAsKpGFURe9RzsxVVUjYE.jpg" alt="怀庄盛世 深蓝色款" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-wine text-white text-sm font-medium py-1 px-3 rounded-full">
+                            经典款
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl mb-2 text-gray-900">怀庄盛世（深蓝款）</h3>
+                        <p class="text-gray-600 mb-4">
+                            53%vol酱香型白酒，酒体醇厚，酱香突出，口感细腻协调，余味悠长。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-2xl text-wine">¥468</span>
+                            <button class="add-to-cart bg-wine hover:bg-wine-dark text-white p-2 rounded-full transition-colors" 
+                                    data-id="1" 
+                                    data-name="怀庄盛世（深蓝款）" 
+                                    data-price="468" 
+                                    data-image="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIyRpIqFw5O1FNioUj-wRpyyc_LT26AACzjAAAsKpGFURe9RzsxVVUjYE.jpg">
+                                <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第二款酒（橙色款） -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md wine-card-hover group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIyZpIqFxnBbZTG6QxSPZKtArfU5kggAC0DAAAsKpGFUJNkemyciD1TYE.jpg" alt="怀庄盛世 橙色款" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-gold text-gray-900 text-sm font-medium py-1 px-3 rounded-full">
+                            礼盒装
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl mb-2 text-gray-900">怀庄盛世（橙色款）</h3>
+                        <p class="text-gray-600 mb-4">
+                            53%vol酱香型白酒，入口绵柔，酱香浓郁，包装大气，适合送礼与收藏。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-2xl text-wine">¥368</span>
+                            <button class="add-to-cart bg-wine hover:bg-wine-dark text-white p-2 rounded-full transition-colors" 
+                                    data-id="2" 
+                                    data-name="怀庄盛世（橙色款）" 
+                                    data-price="368" 
+                                    data-image="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIyZpIqFxnBbZTG6QxSPZKtArfU5kggAC0DAAAsKpGFUJNkemyciD1TYE.jpg">
+                                <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第三款酒（金色款） -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md wine-card-hover group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIydpIqFyNmogDM-J4Pfshp4wcCoFAgAC0TAAAsKpGFXRQ211Y8dyWTYE.jpg" alt="怀庄盛世 金色款" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl mb-2 text-gray-900">怀庄盛世（金色款）</h3>
+                        <p class="text-gray-600 mb-4">
+                            53%vol酱香型白酒，酒体微黄，陈香明显，口感醇厚丰满，收藏级佳酿。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-2xl text-wine">¥238</span>
+                            <button class="add-to-cart bg-wine hover:bg-wine-dark text-white p-2 rounded-full transition-colors" 
+                                    data-id="3" 
+                                    data-name="怀庄盛世（金色款）" 
+                                    data-price="238" 
+                                    data-image="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIydpIqFyNmogDM-J4Pfshp4wcCoFAgAC0TAAAsKpGFXRQ211Y8dyWTYE.jpg">
+                                <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第四款酒（黑色款） -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md wine-card-hover group">
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIyVpIqFx4MSNgN-Gt_mMdMHTGHWd8AACzzAAAsKpGFWJ-WX-3N_wXzYE.jpg" alt="怀庄盛世 黑色款" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-green-600 text-white text-sm font-medium py-1 px-3 rounded-full">
+                            珍藏款
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif font-bold text-xl mb-2 text-gray-900">怀庄盛世（黑色款）</h3>
+                        <p class="text-gray-600 mb-4">
+                            53%vol酱香型白酒，坤沙工艺酿造，酱香浓郁持久，口感层次丰富，高端宴请之选。
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-2xl text-wine">¥168</span>
+                            <button class="add-to-cart bg-wine hover:bg-wine-dark text-white p-2 rounded-full transition-colors" 
+                                    data-id="4" 
+                                    data-name="怀庄盛世（黑色款）" 
+                                    data-price="168" 
+                                    data-image="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELIyVpIqFx4MSNgN-Gt_mMdMHTGHWd8AACzzAAAsKpGFWJ-WX-3N_wXzYE.jpg">
+                                <i class="fa fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 购物车侧边栏 -->
+    <div id="cart" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" id="cart-overlay"></div>
+        <div class="absolute top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform transition-transform duration-300 translate-x-full" id="cart-panel">
+            <div class="flex flex-col h-full">
+                <!-- 购物车头部 -->
+                <div class="p-6 border-b flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-gray-900">购物车</h3>
+                    <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                        <i class="fa fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- 购物车内容 -->
+                <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4">
+                    <div id="empty-cart-message" class="text-center py-12">
+                        <img src="https://picsum.photos/id/28/200/200" alt="空购物车" class="w-32 h-32 mx-auto mb-4 rounded-full bg-gray-100 object-cover">
+                        <p class="text-gray-500">您的购物车还是空的</p>
+                        <a href="#wines" class="mt-4 inline-block text-wine hover:text-wine-dark font-medium">开始购物</a>
+                    </div>
+                    <!-- 购物车项目将通过JS动态添加 -->
+                </div>
+                
+                <!-- 购物车底部 -->
+                <div class="border-t p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-gray-600">总计:</span>
+                        <span id="cart-total" class="text-xl font-bold text-gray-900">¥0</span>
+                    </div>
+                    <button id="checkout-button" class="w-full bg-wine hover:bg-wine-dark text-white font-medium py-3 px-6 rounded-lg transition-colors mb-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        结算
+                    </button>
+                    <button id="continue-shopping" class="w-full bg-white border border-gray-300 text-gray-700 font-medium py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors">
+                        继续购物
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加到购物车成功提示 -->
+    <div id="add-to-cart-notification" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-full flex items-center">
+        <i class="fa fa-check-circle mr-2"></i>
+        <span id="notification-message">商品已添加到购物车</span>
+    </div>
+
+    <!-- 底部脚本 -->
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-md');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2', 'shadow-md');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                // 如果点击的是购物车链接，特殊处理
+                if (targetId === '#cart') {
+                    openCart();
+                    return;
+                }
+                
+                document.querySelector(targetId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // 关闭移动端菜单
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // 购物车功能
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartCountElement = document.getElementById('cart-count');
+        const mobileCartCountElement = document.getElementById('mobile-cart-count');
+        const cartTotalElement = document.getElementById('cart-total');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const checkoutButton = document.getElementById('checkout-button');
+        const addToCartNotification = document.getElementById('add-to-cart-notification');
+        const notificationMessage = document.getElementById('notification-message');
+
+        // 更新购物车显示
+        function updateCart() {
+            // 保存购物车到本地存储
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // 更新购物车计数
+            const totalItems = cart.reduce((count, item) => count + item.quantity, 0);
+            cartCountElement.textContent = totalItems;
+            mobileCartCountElement.textContent = totalItems;
+            
+            // 更新购物车内容
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                checkoutButton.disabled = true;
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                checkoutButton.disabled = false;
+                
+                cart.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'flex items-center space-x-4 border-b pb-4 cart-item-enter';
+                    cartItem.style.animationDelay = `${index * 0.1}s`;
+                    
+                    cartItem.innerHTML = `
+                        <div class="w-20 h-20 rounded-lg overflow-hidden">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-medium text-gray-900">${item.name}</h4>
+                            <p class="text-gray-500 text-sm">¥${item.price}</p>
+                            <div class="flex items-center mt-2">
+                                <button class="decrease-quantity bg-gray-100 hover:bg-gray-200 p-1 rounded" data-id="${item.id}">
+                                    <i class="fa fa-minus text-xs"></i>
+                                </button>
+                                <span class="mx-2 text-gray-700">${item.quantity}</span>
+                                <button class="increase-quantity bg-gray-100 hover:bg-gray-200 p-1 rounded" data-id="${item.id}">
+                                    <i class="fa fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-medium text-gray-900">¥${item.price * item.quantity}</p>
+                            <button class="remove-item text-gray-400 hover:text-red-500 mt-2" data-id="${item.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    cartItemsContainer.appendChild(cartItem);
+                });
+                
+                // 添加数量修改和删除事件监听
+                document.querySelectorAll('.decrease-quantity').forEach(button => {
+                    button.addEventListener('click', function() {
+                        changeQuantity(this.getAttribute('data-id'), -1);
+                    });
+                });
+                
+                document.querySelectorAll('.increase-quantity').forEach(button => {
+                    button.addEventListener('click', function() {
+                        changeQuantity(this.getAttribute('data-id'), 1);
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', function() {
+                        removeFromCart(this.getAttribute('data-id'));
+                    });
+                });
+            }
+            
+            // 更新总价
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotalElement.textContent = `¥${total}`;
+        }
+
+        // 添加商品到购物车
+        function addToCart(productId, productName, productPrice, productImage) {
+            const existingItemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (existingItemIndex > -1) {
+                // 如果商品已在购物车中，增加数量
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                // 否则添加新商品
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: parseInt(productPrice),
+                    image: productImage,
+                    quantity: 1
+                });
+            }
+            
+            // 更新购物车显示
+            updateCart();
+            
+            // 显示添加成功提示
+            showAddToCartNotification(productName);
+        }
+
+        // 修改商品数量
+        function changeQuantity(productId, change) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += change;
+                
+                // 如果数量小于1，从购物车中移除
+                if (cart[itemIndex].quantity < 1) {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                updateCart();
+            }
+        }
+
+        // 从购物车移除商品
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // 清空购物车
+        function clearCart() {
+            cart = [];
+            updateCart();
+        }
+
+        // 显示添加到购物车的提示
+        function showAddToCartNotification(productName) {
+            notificationMessage.textContent = `${productName} 已添加到购物车`;
+            addToCartNotification.classList.remove('translate-y-full');
+            
+            setTimeout(() => {
+                addToCartNotification.classList.add('translate-y-full');
+            }, 3000);
+        }
+
+        // 打开购物车
+        function openCart() {
+            const cartPanel = document.getElementById('cart-panel');
+            const cartOverlay = document.getElementById('cart-overlay');
+            
+            document.getElementById('cart').classList.remove('hidden');
+            setTimeout(() => {
+                cartPanel.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        // 关闭购物车
+        function closeCart() {
+            const cartPanel = document.getElementById('cart-panel');
+            
+            cartPanel.classList.add('translate-x-full');
+            setTimeout(() => {
+                document.getElementById('cart').classList.add('hidden');
+            }, 300);
+        }
+
+        // 添加到购物车按钮事件监听
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                const productName = this.getAttribute('data-name');
+                const productPrice = this.getAttribute('data-price');
+                const productImage = this.getAttribute('data-image');
+                
+                addToCart(productId, productName, productPrice, productImage);
+            });
+        });
+
+        // 关闭购物车按钮事件
+        document.getElementById('close-cart').addEventListener('click', closeCart);
+
+        // 点击购物车背景关闭购物车
+        document.getElementById('cart-overlay').addEventListener('click', closeCart);
+
+        // 继续购物按钮事件
+        document.getElementById('continue-shopping').addEventListener('click', function() {
+            closeCart();
+            document.querySelector('#wines').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // 结算按钮事件
+        document.getElementById('checkout-button').addEventListener('click', function() {
+            alert('感谢您的购买！我们将尽快处理您的订单。');
+            clearCart();
+            closeCart();
+        });
+
+        // 初始化购物车显示
+        updateCart();
+    </script>
+</body>
+</html>
